@@ -41,6 +41,12 @@ const lat            = input.lat            || 0;
 const lng            = input.lng            || 0;
 const mapsUrl        = input.mapsUrl        || `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 
+// ── WHATSAPP LİNK ──
+const waMessage = lang === "de" 
+  ? "Guten Tag, ich interessiere mich für ein Bauvorhaben."
+  : "Merhaba, bir inşaat projesi için bilgi almak istiyorum.";
+const waLink = telefonSade ? `https://wa.me/${telefonSade.replace(/^\+/, "")}?text=${encodeURIComponent(waMessage)}` : "#";
+
 // ── GOOGLE PUAN + YORUMLAR ──
 const googlePuan     = String(input.googlePuan || "5.0");
 const toplamYorum    = String(input.toplamYorum || "0");
@@ -235,7 +241,6 @@ const html = `<!DOCTYPE html>
 <link rel="preload" as="video" type="video/mp4" href="${heroVideo}" />
 
 /* ─── PARÇA 1 SONU — buradan sonra Bölüm A (style + nav + hero + stats) gelecek ─── */
-
 /* ─── PARÇA 1 SONUNDAN DEVAM EDİYOR — burayı Parça 1'in altına yapıştır ─── */
 
 <style>
@@ -3387,3 +3392,835 @@ body.menu-open .float-menu { display: none; }
 <!-- GOOGLE REVIEWS -->
 
 /* ─── PARÇA 2 SONU — buradan sonra Parça 3 (Reviews + CTA + Contact + Footer + JS + Closing) gelecek ─── */
+/* ─── PARÇA 2 SONUNDAN DEVAM EDİYOR — burayı Parça 2'nin altına yapıştır ─── */
+
+<!-- GOOGLE REVIEWS -->
+<section class="reviews">
+  <div class="reviews-inner">
+    <div class="reviews-header reveal">
+      <div class="reviews-rating">
+        <div class="reviews-stars" aria-label="${googlePuan} / 5">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.5h7.4l-6 4.5 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.5h7.4z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.5h7.4l-6 4.5 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.5h7.4z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.5h7.4l-6 4.5 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.5h7.4z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.5h7.4l-6 4.5 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.5h7.4z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 7.5h7.4l-6 4.5 2.3 7.5L12 17l-6.3 4.5L8 14 2 9.5h7.4z"/></svg>
+        </div>
+        <div class="reviews-rating-text">
+          <span class="reviews-score">${googlePuan.replace(".", ",")}</span>
+          <span class="reviews-source">${t.reviews_rating}</span>
+        </div>
+      </div>
+      <h2 class="reviews-headline" data-i18n="reviews_headline">${t.reviews_headline}</h2>
+    </div>
+
+    <div class="reviews-carousel reveal reveal-d1">
+      <div class="reviews-track" id="reviewsTrack">
+${yorumKartlari}
+      
+      </div>
+
+      <button type="button" class="reviews-nav reviews-nav-prev" id="reviewsPrev" aria-label="Vorherige Bewertung">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="reviews-nav reviews-nav-next" id="reviewsNext" aria-label="Nächste Bewertung">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="reviews-dots" id="reviewsDots" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <div class="cta-strip-inner">
+    <div>
+      <div class="cta-overline reveal">${firmaSlogan}</div>
+      <h2 class="cta-headline reveal reveal-d1" data-i18n-html="cta_headline">Bereit für ein Bauvorhaben<br /><em>auf höchstem Niveau?</em></h2>
+    </div>
+    <div class="cta-actions reveal reveal-d2">
+      <a href="#kontakt" class="btn-primary">
+        <span data-i18n="nav_cta">Termin vereinbaren</span>
+        <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M1 5h16M13 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" /></svg>
+      </a>
+      <a href="tel:${telefonSade}" class="btn-ghost">${telefon}</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="kontakt">
+  <div class="contact-grid">
+    <div>
+      <div class="section-label reveal" data-i18n="ctc_label">Kontakt</div>
+      <h2 class="section-title reveal reveal-d1" data-i18n-html="ctc_title" style="margin-bottom: 2.5rem;">Wir sind<br /><em>für Sie da.</em></h2>
+      <div class="contact-info-block reveal reveal-d2">
+        <div class="contact-info-label" data-i18n="ctc_location">Standort</div>
+        <div class="contact-info-value">
+          ${adres}
+          <span class="secondary">${adresKisa.split(",").slice(-1)[0] ? adresKisa.split(",").slice(-1)[0].trim() : ""}</span>
+          <a href="${mapsUrl}"
+             target="_blank" rel="noopener"
+             class="contact-route-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 21s-7-7.5-7-12a7 7 0 1 1 14 0c0 4.5-7 12-7 12z" stroke-linejoin="round" />
+              <circle cx="12" cy="9" r="2.5" />
+            </svg>
+            <span data-i18n="ctc_route_btn">Routenplaner öffnen</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-info-block reveal reveal-d2">
+        <div class="contact-info-label" data-i18n="ctc_office">Büro</div>
+        <div class="contact-info-value"><a href="tel:${telefonSade}">${telefon}</a><span class="secondary"><a href="mailto:${emailOfis}">${emailOfis}</a></span></div>
+      </div>
+      <div class="contact-info-block reveal reveal-d3">
+        <div class="contact-info-label" data-i18n="ctc_hours">Sprechzeit</div>
+        <div class="contact-info-value" style="font-size: 0.95rem; font-family: var(--font-body); font-weight: 400;">${calismaSaatGosterim || calismaSaat}</div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal reveal-d1">
+      <h3 class="contact-form-title" data-i18n="form_title">Projekt anfragen</h3>
+      <p class="contact-form-sub" data-i18n="form_sub">Antwort innerhalb von 24 Stunden.</p>
+      <div class="field field-row">
+        <div><label for="vn" data-i18n="form_firstname">Vorname</label><input id="vn" type="text" autocomplete="given-name" /></div>
+        <div><label for="nn" data-i18n="form_lastname">Nachname</label><input id="nn" type="text" autocomplete="family-name" /></div>
+      </div>
+      <div class="field field-row">
+        <div><label for="em" data-i18n="form_email">E-Mail</label><input id="em" type="email" autocomplete="email" /></div>
+        <div><label for="tel" data-i18n="form_phone">Mobilnummer</label><input id="tel" type="tel" autocomplete="tel" /></div>
+      </div>
+      <div class="field">
+        <label for="anliegen" data-i18n="form_concern">Ihr Anliegen</label>
+        <select id="anliegen">
+          <option data-i18n="form_select">Auswahl …</option>
+          <option data-i18n="form_neubau">Neubau</option>
+          <option data-i18n="form_altbau">Altbau</option>
+          <option data-i18n="form_umbau">Umbau</option>
+          <option data-i18n="form_san">Sanierung</option>
+          <option data-i18n="form_holz">Holzbau</option>
+          <option data-i18n="form_ausf">Ausführung</option>
+          <option data-i18n="form_other">Sonstiges</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-i18n="form_contact_pref">Wie wollen Sie kontaktiert werden?</label>
+        <div class="field-radio-group">
+          <div class="field-radio"><input type="radio" name="ch" id="ch1" checked /><label for="ch1" data-i18n="form_callback">Rückruf</label></div>
+          <div class="field-radio"><input type="radio" name="ch" id="ch2" /><label for="ch2" data-i18n="form_email_short">E-Mail</label></div>
+          <div class="field-radio"><input type="radio" name="ch" id="ch3" /><label for="ch3">WhatsApp</label></div>
+          <div class="field-radio field-radio-easter"><input type="radio" name="ch" id="ch4" /><label for="ch4" id="brieftaubeLabel" data-i18n="form_pigeon">Brieftaube</label></div>
+        </div>
+        <div class="brieftaube-msg" id="brieftaubeMsg" data-i18n-html="form_pigeon_msg">
+          Leider sind alle unsere Tauben im Einsatz. Versuche es doch über
+          einen anderen Kanal&nbsp;<span style="color:var(--copper);">(:</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="msg" data-i18n="form_message">Nachricht</label>
+        <textarea id="msg" rows="4"></textarea>
+      </div>
+      <button class="contact-submit" type="button" onclick="alert(t.demo_text || 'Demo: Nachricht würde an ${emailOfis} gesendet')">
+        <span data-i18n="form_submit">Anfrage senden</span>
+        <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M1 5h16M13 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" /></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-mark">${navTitle}</div>
+        <p class="footer-tagline">${firmaSlogan}</p>
+      </div>
+      <div class="footer-col">
+        <h5 data-i18n="footer_nav">Navigation</h5>
+        <ul><li><a href="#leistungen" data-i18n="nav_services">Leistungen</a></li><li><a href="#prozess" data-i18n="nav_process">Prozess</a></li><li><a href="#referenzen" data-i18n="nav_references">Referenzen</a></li><li><a href="#ueber-uns" data-i18n="nav_about">Über uns</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5 data-i18n="footer_contact">Kontakt</h5>
+        <ul><li><a href="tel:${telefonSade}">${telefon}</a></li><li><a href="mailto:${emailOfis}">${emailOfis}</a></li><li>${adres}</li></ul>
+      </div>
+      <div class="footer-col">
+        <h5 data-i18n="footer_disciplines">Disziplinen</h5>
+        <ul><li data-i18n="srv_neubau_title">Neubau</li><li data-i18n="srv_umbau_title">Umbau</li><li data-i18n="srv_san_title">Sanierung</li><li data-i18n="srv_holz_title">Holzbau</li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© ${new Date().getFullYear()} ${firmaAdi}</div>
+      <div class="footer-legal"><a href="#" data-i18n="footer_imprint">Impressum</a><a href="#" data-i18n="footer_privacy">Datenschutz</a></div>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.45/dist/lenis.min.js"></script>
+<script>
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+// CURSOR (desktop only)
+if (!isTouchDevice && window.innerWidth > 900) {
+  const cursor = document.querySelector('.cursor');
+  const cursorDot = document.querySelector('.cursor-dot');
+  let mx=0,my=0,cx=0,cy=0;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(cursorDot){cursorDot.style.left=mx+'px';cursorDot.style.top=my+'px';}});
+  function tickCursor(){cx+=(mx-cx)*0.15;cy+=(my-cy)*0.15;if(cursor){cursor.style.left=cx+'px';cursor.style.top=cy+'px';}requestAnimationFrame(tickCursor);}
+  tickCursor();
+  document.querySelectorAll('a,button,.portfolio-item,.service,.field-radio label,input,textarea,select').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cursor&&cursor.classList.add('is-hover'));
+    el.addEventListener('mouseleave',()=>cursor&&cursor.classList.remove('is-hover'));
+  });
+}
+
+// LENIS
+const lenis = new Lenis({duration:1.4,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true,smoothTouch:false});
+function lenisRaf(time){lenis.raf(time);requestAnimationFrame(lenisRaf);}
+requestAnimationFrame(lenisRaf);
+
+// ═══════════════════════════════════════════════════════════
+// I18N — DE / EN / TR (DeepL kalitesinde anlam çevirisi)
+// ═══════════════════════════════════════════════════════════
+const I18N = {
+  de: {
+    page_title: "CM Baumanagement — Wo Handwerk Architektur wird.",
+    page_desc: "Generalunternehmer für Neubau, Umbau, Sanierung und Holzbau auf höchstem Niveau.",
+    nav_services: "Leistungen", nav_process: "Prozess", nav_references: "Referenzen", nav_about: "Über uns", nav_contact: "Kontakt", nav_cta: "Termin vereinbaren", lang_label: "Sprache",
+    hero_overline: "Generalunternehmer · seit 2023",
+    hero_title_1: "Präzision.", hero_title_2: "Effizienz.", hero_title_3: "Handschlag.",
+    hero_sub: "Ihr verlässlicher Generalunternehmer für Neubau, Umbau, Sanierung und Holzbau. Wir stehen für strukturierte Bauprozesse, die Qualität, Zeit und Budget vereinen — von der ersten Idee bis zur Schlüsselübergabe.",
+    hero_cta_primary: "Projekt besprechen", hero_cta_secondary: "Leistungen entdecken",
+    spec_label: "Live · Aktuelle Auslastung", spec_active: "Aktive Projekte", spec_region: "Region", spec_specialty: "Spezialisierung", spec_specialty_value: "Holzbau", spec_capacity: "Kapazität Q3 / 2026", spec_capacity_value: "verfügbar", spec_response: "Reaktionszeit", scroll_word: "Scroll",
+    stat_founded: "Gegründet", stat_projects: "Projekte", stat_clients: "Zufriedene Kunden", stat_quality: "Handschlagqualität",
+    phil_label: "CM · Bedeutung",
+    phil_tagline: "CM steht für <em>Craftsmanship & Modernity.</em> Wir bewahren das traditionelle Handwerk und sehen die Zukunft in der konsequenten Modernisierung.",
+    guar_label: "Bauen ohne Kompromisse",
+    guar_title: "Was Bauherren<br /><em>von uns erwarten dürfen.</em>",
+    guar_lead: "Als Generalunternehmer übernehmen wir die komplette Koordination aller regionalen Fachbetriebe aus dem Ländle und Umgebung. Zwei Versprechen stehen dabei kompromisslos im Vordergrund.",
+    guar_termin_title: "Termin-Garantie", guar_termin_emph: "Ihre Zeit ist kostbar.",
+    guar_termin_text: "Daher legen wir großen Wert auf die Einhaltung des vereinbarten Zeitplans. Mit bewährten Prozessen und effizienter Koordination garantieren wir eine zügige und termingerechte Fertigstellung Ihres Projekts.",
+    guar_budget_title: "Budget-Sicherheit", guar_budget_emph: "Transparente Kostenkontrolle.",
+    guar_budget_text: "Transparente Kostenaufstellung und striktes Budgetmanagement bilden die Grundsteine unserer Arbeit. Wir setzen uns dafür ein, Ihr Budget sorgfältig einzuhalten und durch kreative und effektive Lösungen eine wirtschaftliche Realisierung Ihres Projekts sicherzustellen.",
+    guar_foot: "Wir arbeiten ausschließlich mit geprüften, regionalen Fachbetrieben — vom ersten Aushub bis zur Schlüsselübergabe.",
+    srv_label: "Leistungsspektrum", srv_title: "Spezialist für<br /><em>Bauvorhaben.</em>",
+    srv_lead: "Von der Revitalisierung historischer Bauten über moderne Neubauten bis hin zu anspruchsvollen Umbauprojekten. Spezialisierte Bauleistungen werden dabei durch entsprechend qualifizierte, regionale Fachbetriebe umgesetzt.",
+    srv_neubau_title: "Neubau", srv_neubau_text: "Von der Grundstücksanalyse bis zum Einzug. Schlüsselfertige Generalunternehmerleistung mit klarer Kostentransparenz und definierten Meilensteinen.",
+    srv_neubau_tag1: "Einfamilienhaus", srv_neubau_tag2: "Wohnbau", srv_neubau_tag3: "Gewerbe",
+    srv_umbau_title: "Umbau", srv_umbau_text: "Den Bestand neu denken. Strukturelle Anpassungen, Aufstockungen und Zubauten — mit Respekt vor der Substanz und Klarheit in der Umsetzung.",
+    srv_umbau_tag1: "Aufstockung", srv_umbau_tag2: "Zubau", srv_umbau_tag3: "Erweiterung",
+    srv_san_title: "Sanierung", srv_san_text: "Altbauten fachgerecht modernisieren. Energetische Optimierung, Substanzerhalt, gestalterische Aufwertung — koordiniert mit regionalen Fachbetrieben.",
+    srv_san_tag1: "Energetisch", srv_san_tag2: "Denkmalschutz", srv_san_tag3: "Modernisierung",
+    srv_holz_title: "Holzbau", srv_holz_text: "Unsere Wurzeln. Konstruktiver Holzbau, vom Aufstockungsmodul bis zum vollständigen Holzhaus — als nachhaltiges, charaktervolles Statement.",
+    srv_holz_tag1: "Konstruktion", srv_holz_tag2: "Holzhaus", srv_holz_tag3: "Nachhaltig",
+    atm_overline: "Atmosphäre",
+    atm_title: "Wenn der Tag<br /><em>zur Ruhe kommt.</em>",
+    atm_sub: "Ein fertiges Bauwerk ist mehr als Mauern, Holz und Glas. Es ist der Ort, an dem Geschichten beginnen — sicher gebaut, sorgfältig koordiniert, termingerecht übergeben.",
+    prin_label: "Unsere Werte", prin_title: "Fünf Prinzipien.<br /><em>Eine Verpflichtung.</em>",
+    prin_lead: "Entdecken Sie unsere vielfältige Palette an Dienstleistungen, die darauf ausgerichtet sind, all Ihre individuellen Bedürfnisse und Anforderungen bestmöglich zu erfüllen.",
+    prin1_title: "Projektberatung + Management",
+    prin1_text: "Wir starten jedes Projekt mit einer detaillierten Aufnahme Ihrer Vision, um Ihre Wünsche maßgerecht umzusetzen. Unser Team arbeitet eng mit Ihnen zusammen, um jeden Aspekt Ihres Projektes zu prüfen und zu koordinieren, wobei Ihre Anforderungen stets im Vordergrund stehen.",
+    prin2_title: "Koordination",
+    prin2_text: "Ein reibungsloser Ablauf erfordert eine sorgfältige Abstimmung aller Gewerke. Wir übernehmen die Koordination der beteiligten Unternehmen und Fachkräfte, um eine harmonische und zielgerichtete Zusammenarbeit zu sichern.",
+    prin3_title: "Nachhaltigkeit",
+    prin3_text: "Nachhaltige Materialbeschaffung ist ein zentrales Anliegen, daher wählen wir Materialien und Ressourcen sorgfältig aus, um nicht nur die Umwelt zu schonen, sondern auch langfristige Wertbeständigkeit in Ihr Bauwerk zu bringen.",
+    prin4_title: "Termintreue", prin4_emph: "Ihre Zeit ist kostbar!",
+    prin4_text: "Daher legen wir großen Wert auf die Einhaltung des vereinbarten Zeitplans. Mit bewährten Prozessen und effizienter Koordination garantieren wir eine zügige und termingerechte Fertigstellung Ihres Projekts.",
+    prin5_title: "Kostenmanagement",
+    prin5_text: "Transparente Kostenaufstellung und striktes Budgetmanagement bilden die Grundsteine unserer Arbeit. Wir setzen uns dafür ein, Ihr Budget sorgfältig einzuhalten und durch kreative und effektive Lösungen eine wirtschaftliche Realisierung Ihres Projekts sicherzustellen.",
+    prc_label: "Ablauf", prc_title: "Von der Idee.<br /><em>Bis zur Übergabe.</em>",
+    prc_lead: "Strukturierte Bauprozesse statt improvisiertem Aktionismus. Jeder Schritt ist dokumentiert, terminiert und mit Ihnen abgestimmt.",
+    prc1_title: "Erstgespräch", prc1_text: "Vision, Rahmen, Machbarkeit. Vor Ort oder digital.",
+    prc2_title: "Konzept", prc2_text: "Detaillierte Aufnahme, Variantenstudie, Erstkalkulation.",
+    prc3_title: "Planung", prc3_text: "Behörde, Ausführungsplan, Gewerkekoordination.",
+    prc4_title: "Ausführung", prc4_text: "Bauleitung, Termin- und Kostencontrolling, Qualitätssicherung.",
+    prc5_title: "Übergabe", prc5_text: "Schlussabnahme, Dokumentation, Gewährleistung.",
+    bau_label: "Projekt Aufstockung", bau_title: "Vorher.<br /><em>Nachher.</em>",
+    bau_lead: "Eine reale Aufstockung, in zehn Sekunden erzählt. Drei Fassaden, drei Perspektiven — der Bestand bleibt, der Charakter wächst.",
+    bau_tag: "Vorher · Nachher",
+    ref_label: "Referenzen", ref_title: "Realisierte<br /><em>Bauwerke.</em>",
+    ref_lead: "Eine Auswahl unserer Arbeiten. Vom Neubau über sensible Sanierungen bis hin zu Holzbau-Projekten mit Charakter.",
+    ref1_title: "Aufstockung", ref1_meta: "Vorher · Nachher", ref1_tag: "Aufstockung",
+    ref2_title: "Hofacker", ref2_meta: "Zubau · Umbau", ref2_tag: "Zubau",
+    ref3_title: "Özgün", ref3_meta: "Schlüsselfertig", ref3_tag: "Neubau",
+    ref4_title: "Spiegel", ref4_meta: "Bestandserneuerung", ref4_tag: "Sanierung",
+    werte_eng_title: "Engagement", werte_eng_text: "Höchste Qualitätsstandards und eine kundenorientierte Herangehensweise zeichnen unsere Arbeit aus.",
+    werte_ver_title: "Vertrauen", werte_ver_text: "Zählen auf unser professionelles Team, das Ihr Bauprojekt mit Sorgfalt und fachlicher Kompetenz zum Erfolg führt.",
+    abt_label: "Geschäftsführung", abt_title: "Die Köpfe<br /><em>hinter CM.</em>",
+    abt_lead: "Wir verstehen die Einzigartigkeit jedes Projektes und bieten daher maßgeschneiderte Lösungen, die präzise auf unsere Kunden abgestimmt werden.",
+    abt_quote: "Ich baue nicht nur Gebäude — ich gestalte Werte.",
+    abt_bio: "Wir verbinden traditionelles Handwerk mit moderner Baukompetenz. Mit präziser Planung, klarer Struktur und echter Handschlagqualität entwickeln wir durchdachte, strukturierte Bauprozesse — für Projekte, die Bestand haben und Vertrauen schaffen.",
+    abt_role_ceo: "CEO & Founder", abt_role_pm: "Projektleiter",
+    cta_overline: "Präzision · Effizienz",
+    cta_headline: "Bereit für ein Bauvorhaben<br /><em>auf höchstem Niveau?</em>",
+    ctc_label: "Kontakt", ctc_title: "Wir sind<br /><em>für Sie da.</em>",
+    ctc_location: "Standort", ctc_region: "", ctc_route_btn: "Routenplaner öffnen",
+    ctc_office: "Büro", ctc_ceo_label: "CEO", ctc_pm_label: "Projekt", ctc_hours: "Sprechzeit", ctc_hours_1: "Mo – Fr · 08:00 – 12:00",
+    form_title: "Projekt anfragen", form_sub: "Antwort innerhalb von 24 Stunden.",
+    form_firstname: "Vorname", form_lastname: "Nachname", form_email: "E-Mail", form_phone: "Mobilnummer",
+    form_concern: "Ihr Anliegen", form_select: "Auswahl …",
+    form_neubau: "Neubau", form_altbau: "Altbau", form_umbau: "Umbau", form_san: "Sanierung", form_holz: "Holzbau", form_ausf: "Ausführung", form_other: "Sonstiges",
+    form_contact_pref: "Wie wollen Sie kontaktiert werden?", form_callback: "Rückruf", form_email_short: "E-Mail", form_pigeon: "Brieftaube",
+    form_pigeon_msg: "Leider sind alle unsere Tauben im Einsatz. Versuche es doch über einen anderen Kanal&nbsp;<span style=\"color:var(--copper);\">(:</span>",
+    form_message: "Nachricht", form_submit: "Anfrage senden",
+    footer_tagline: "Generalunternehmer auf höchstem Niveau.",
+    footer_nav: "Navigation", footer_contact: "Kontakt", footer_disciplines: "Disziplinen",
+    footer_copy: "© 2026 CM Baumanagement", footer_imprint: "Impressum", footer_privacy: "Datenschutz",
+    float_ai: "KI-Assistent · Fragen stellen", float_maps: "Routenplaner", float_wa: "WhatsApp · Sofort-Anfrage", float_top: "Nach oben",
+  },
+  en: {
+    page_title: "CM Baumanagement — Where Craft Becomes Architecture.",
+    page_desc: "General contractor for new builds, renovations, refurbishments and timber construction at the highest level.",
+    nav_services: "Services", nav_process: "Process", nav_references: "Projects", nav_about: "About", nav_contact: "Contact", nav_cta: "Book a meeting", lang_label: "Language",
+    hero_overline: "General Contractor · Since 2023",
+    hero_title_1: "Precision.", hero_title_2: "Efficiency.", hero_title_3: "Handshake.",
+    hero_sub: "Your trusted general contractor for new builds, renovations, refurbishments and timber construction. We deliver structured building processes that bring quality, timing and budget into perfect balance — from the first idea to the handover of your keys.",
+    hero_cta_primary: "Discuss your project", hero_cta_secondary: "Explore our services",
+    spec_label: "Live · Current Capacity", spec_active: "Active projects", spec_region: "Region", spec_specialty: "Specialisation", spec_specialty_value: "Timber construction", spec_capacity: "Capacity Q3 / 2026", spec_capacity_value: "available", spec_response: "Response time", scroll_word: "Scroll",
+    stat_founded: "Founded", stat_projects: "Projects", stat_clients: "Satisfied clients", stat_quality: "Handshake quality",
+    phil_label: "CM · Meaning",
+    phil_tagline: "CM stands for <em>Craftsmanship & Modernity.</em> We honour traditional craft and see the future in consistent, considered modernisation.",
+    guar_label: "Building without compromise",
+    guar_title: "What clients can<br /><em>truly expect from us.</em>",
+    guar_lead: "As a general contractor, we coordinate every regional specialist firm. Two promises stand uncompromisingly above all else.",
+    guar_termin_title: "Schedule guarantee", guar_termin_emph: "Your time is precious.",
+    guar_termin_text: "That's why we hold strictly to the agreed schedule. Through proven processes and efficient coordination, we guarantee swift, on-time completion of your project.",
+    guar_budget_title: "Budget assurance", guar_budget_emph: "Transparent cost control.",
+    guar_budget_text: "Transparent cost breakdowns and strict budget management form the foundation of our work. We commit to staying within your budget through creative, effective solutions that ensure your project remains economically sound.",
+    guar_foot: "We work exclusively with vetted regional specialist firms — from the first excavation to the handover of your keys.",
+    srv_label: "Service Spectrum", srv_title: "Specialist in<br /><em>building projects.</em>",
+    srv_lead: "From the revitalisation of historic buildings to modern new builds and demanding renovation projects. Specialised construction work is delivered by suitably qualified regional specialist firms.",
+    srv_neubau_title: "New Build", srv_neubau_text: "From site analysis to move-in. Turnkey general contractor service with clear cost transparency and defined milestones.",
+    srv_neubau_tag1: "Single-family", srv_neubau_tag2: "Residential", srv_neubau_tag3: "Commercial",
+    srv_umbau_title: "Renovation", srv_umbau_text: "Rethinking the existing structure. Structural adaptations, vertical extensions and additions — with respect for the substance and clarity in execution.",
+    srv_umbau_tag1: "Vertical extension", srv_umbau_tag2: "Addition", srv_umbau_tag3: "Expansion",
+    srv_san_title: "Refurbishment", srv_san_text: "Modernising older buildings with expertise. Energy-efficiency upgrades, structural preservation, aesthetic enhancement — coordinated with regional specialist firms.",
+    srv_san_tag1: "Energy", srv_san_tag2: "Heritage", srv_san_tag3: "Modernisation",
+    srv_holz_title: "Timber Construction", srv_holz_text: "Our roots. Structural timber construction, from extension modules to fully timber-built homes — as a sustainable statement of character.",
+    srv_holz_tag1: "Structural", srv_holz_tag2: "Timber home", srv_holz_tag3: "Sustainable",
+    atm_overline: "Atmosphere",
+    atm_title: "When the day<br /><em>finds its calm.</em>",
+    atm_sub: "A finished building is more than walls, wood and glass. It is the place where stories begin — built securely, coordinated meticulously, delivered on time.",
+    prin_label: "Our Values", prin_title: "Five principles.<br /><em>One commitment.</em>",
+    prin_lead: "Discover our diverse range of services, designed to meet every individual need and requirement to the highest standard.",
+    prin1_title: "Project consulting + management",
+    prin1_text: "We begin every project with a detailed capture of your vision, to translate your wishes precisely into reality. Our team works closely with you to review and coordinate every aspect of your project, with your requirements always at the centre.",
+    prin2_title: "Coordination",
+    prin2_text: "A smooth process requires careful coordination of every trade. We take on the orchestration of all involved firms and specialists to ensure harmonious, focused collaboration.",
+    prin3_title: "Sustainability",
+    prin3_text: "Sustainable material sourcing is a central concern. We carefully select materials and resources to protect the environment and to bring lasting value to your building.",
+    prin4_title: "On-time delivery", prin4_emph: "Your time is precious!",
+    prin4_text: "That's why we hold strictly to the agreed schedule. With proven processes and efficient coordination, we guarantee swift, on-time completion of your project.",
+    prin5_title: "Cost management",
+    prin5_text: "Transparent cost breakdowns and strict budget management form the foundation of our work. We commit to staying within your budget through creative, effective solutions that ensure your project remains economically sound.",
+    prc_label: "Workflow", prc_title: "From the idea.<br /><em>To the handover.</em>",
+    prc_lead: "Structured building processes instead of improvised activity. Every step is documented, scheduled and aligned with you.",
+    prc1_title: "Initial consultation", prc1_text: "Vision, scope, feasibility. On site or remote.",
+    prc2_title: "Concept", prc2_text: "Detailed survey, options study, first cost estimate.",
+    prc3_title: "Planning", prc3_text: "Authorities, execution plan, trade coordination.",
+    prc4_title: "Execution", prc4_text: "Site management, schedule and cost controlling, quality assurance.",
+    prc5_title: "Handover", prc5_text: "Final inspection, documentation, warranty.",
+    bau_label: "Vertical Extension Project", bau_title: "Before.<br /><em>After.</em>",
+    bau_lead: "A real vertical extension, told in ten seconds. Three façades, three perspectives — the existing structure remains, the character grows.",
+    bau_tag: "Before · After",
+    ref_label: "Projects", ref_title: "Realised<br /><em>buildings.</em>",
+    ref_lead: "A selection of our work. From new builds to sensitive refurbishments and timber projects with character.",
+    ref1_title: "Vertical Extension", ref1_meta: "Before · After", ref1_tag: "Extension",
+    ref2_title: "Hofacker", ref2_meta: "Addition · Renovation", ref2_tag: "Addition",
+    ref3_title: "Özgün", ref3_meta: "Turnkey", ref3_tag: "New Build",
+    ref4_title: "Spiegel", ref4_meta: "Building renewal", ref4_tag: "Refurbishment",
+    werte_eng_title: "Commitment", werte_eng_text: "The highest quality standards and a client-centred approach define our work.",
+    werte_ver_title: "Trust", werte_ver_text: "Rely on our professional team to bring your building project to success with care and expertise.",
+    abt_label: "Leadership", abt_title: "The minds<br /><em>behind CM.</em>",
+    abt_lead: "We understand the uniqueness of every project, and so we deliver tailored solutions precisely shaped to our clients.",
+    abt_quote: "I don't just build buildings — I shape values.",
+    abt_bio: "Rooted in timber construction with over 15 years of building experience, I stand for precise planning, clear structure and genuine handshake quality. I bring traditional craft together with modern construction expertise, developing thoughtful, structured building processes — for projects that endure and that earn trust.",
+    abt_role_ceo: "CEO & Founder", abt_role_pm: "Project Manager",
+    cta_overline: "Precision · Efficiency · CM",
+    cta_headline: "Ready for a building project<br /><em>at the highest level?</em>",
+    ctc_label: "Contact", ctc_title: "We are<br /><em>here for you.</em>",
+    ctc_location: "Location", ctc_region: "", ctc_route_btn: "Open route planner",
+    ctc_office: "Office", ctc_ceo_label: "CEO", ctc_pm_label: "Project", ctc_hours: "Office hours", ctc_hours_1: "Mon – Fri · 08:00 – 12:00",
+    form_title: "Request a project", form_sub: "Reply within 24 hours.",
+    form_firstname: "First name", form_lastname: "Last name", form_email: "Email", form_phone: "Mobile",
+    form_concern: "Your enquiry", form_select: "Choose …",
+    form_neubau: "New build", form_altbau: "Existing building", form_umbau: "Renovation", form_san: "Refurbishment", form_holz: "Timber construction", form_ausf: "Execution", form_other: "Other",
+    form_contact_pref: "How would you like to be contacted?", form_callback: "Callback", form_email_short: "Email", form_pigeon: "Carrier pigeon",
+    form_pigeon_msg: "Sadly, all our pigeons are out on duty. How about another channel&nbsp;<span style=\"color:var(--copper);\">(:</span>",
+    form_message: "Message", form_submit: "Send enquiry",
+    footer_tagline: "General contractor at the highest level.",
+    footer_nav: "Navigation", footer_contact: "Contact", footer_disciplines: "Disciplines",
+    footer_copy: "© 2026 CM Baumanagement", footer_imprint: "Imprint", footer_privacy: "Privacy",
+    float_ai: "AI assistant · Ask a question", float_maps: "Route planner", float_wa: "WhatsApp · Instant enquiry", float_top: "Back to top",
+  },
+  tr: {
+    page_title: "CM Baumanagement — Zanaatın mimariye dönüştüğü yer.",
+    page_desc: "En yüksek standartta yeni yapı, tadilat, restorasyon ve ahşap inşaat hizmeti.",
+    nav_services: "Hizmetler", nav_process: "Süreç", nav_references: "Projeler", nav_about: "Hakkımızda", nav_contact: "İletişim", nav_cta: "Görüşme planla", lang_label: "Dil",
+    hero_overline: "Genel Müteahhit · 2023'ten bu yana",
+    hero_title_1: "Hassasiyet.", hero_title_2: "Verimlilik.", hero_title_3: "Söz senedi.",
+    hero_sub: "Yeni yapı, tadilat, restorasyon ve ahşap inşaat alanında tercih edilen genel müteahhidiniz. Kaliteyi, zamanı ve bütçeyi tek bir denge içinde buluşturan, yapılandırılmış inşaat süreçlerini savunuyoruz — ilk fikirden anahtar tesliminin son anına kadar.",
+    hero_cta_primary: "Projenizi konuşalım", hero_cta_secondary: "Hizmetleri keşfet",
+    spec_label: "Canlı · Mevcut Doluluk", spec_active: "Aktif projeler", spec_region: "Bölge", spec_specialty: "Uzmanlık", spec_specialty_value: "Ahşap inşaat (Holzbau)", spec_capacity: "Q3 / 2026 kapasitesi", spec_capacity_value: "müsait", spec_response: "Yanıt süresi", scroll_word: "Kaydır",
+    stat_founded: "Kuruluş", stat_projects: "Proje", stat_clients: "Memnun müşteri", stat_quality: "Söz senedi",
+    phil_label: "CM · Anlamı",
+    phil_tagline: "CM <em>Craftsmanship & Modernity</em> anlamına gelir. Geleneksel zanaatı korur, geleceği tutarlı bir modernleşmede görürüz.",
+    guar_label: "Tavizsiz inşa",
+    guar_title: "Yapı sahiplerinin<br /><em>bizden gerçekten beklediği şeyler.</em>",
+    guar_lead: "Genel müteahhit olarak tüm bölgesel uzman firmaları biz koordine ederiz. İki söz, hiçbir tavize yer bırakmadan başta gelir.",
+    guar_termin_title: "Termin garantisi", guar_termin_emph: "Zamanınız değerlidir.",
+    guar_termin_text: "Bu yüzden kararlaştırılan zaman planına sıkı sıkıya bağlı kalırız. Kanıtlanmış süreçler ve etkin koordinasyon ile projenizin hızlı ve zamanında tamamlanmasını garanti ederiz.",
+    guar_budget_title: "Bütçe güvencesi", guar_budget_emph: "Şeffaf maliyet kontrolü.",
+    guar_budget_text: "Şeffaf maliyet dökümü ve sıkı bütçe yönetimi işimizin temel taşlarıdır. Yaratıcı ve etkili çözümlerle, bütçenizin içinde kalarak projenizin ekonomik açıdan da sağlam yürümesini sağlamayı taahhüt ederiz.",
+    guar_foot: "Yalnızca seçilmiş, denenmiş bölgesel uzman firmalarla çalışırız — ilk kazıdan anahtar teslimine kadar.",
+    srv_label: "Hizmet Yelpazesi", srv_title: "İnşaat<br /><em>uzmanı.</em>",
+    srv_lead: "Tarihi yapıların revitalizasyonundan modern yeni yapılara, talepkar dönüşüm projelerine kadar. Uzmanlık gerektiren işler, ehliyetli bölgesel uzman firmalar tarafından icra edilir.",
+    srv_neubau_title: "Yeni Yapı (Neubau)", srv_neubau_text: "Arsa analizinden taşınmaya kadar. Net maliyet şeffaflığı ve tanımlı kilometre taşları ile anahtar teslim genel müteahhitlik hizmeti.",
+    srv_neubau_tag1: "Müstakil ev", srv_neubau_tag2: "Konut", srv_neubau_tag3: "Ticari",
+    srv_umbau_title: "Tadilat (Umbau)", srv_umbau_text: "Mevcut yapıyı yeniden düşünmek. Yapısal uyarlamalar, üst kat eklemeleri (Aufstockung) ve eklentiler — yapıya saygıyla, uygulamada netlikle.",
+    srv_umbau_tag1: "Üst kat ekleme", srv_umbau_tag2: "Ek bina", srv_umbau_tag3: "Genişletme",
+    srv_san_title: "Restorasyon (Sanierung)", srv_san_text: "Eski yapıları doğru şekilde modernize etmek. Enerji optimizasyonu, yapısal koruma, estetik iyileştirme — bölgesel uzman firmalarla koordineli.",
+    srv_san_tag1: "Enerji", srv_san_tag2: "Tarihi koruma", srv_san_tag3: "Modernizasyon",
+    srv_holz_title: "Ahşap İnşaat (Holzbau)", srv_holz_text: "Köklerimiz. Üst kat modüllerinden tamamı ahşap evlere kadar yapısal ahşap inşaat — sürdürülebilir ve karakterli bir tercih.",
+    srv_holz_tag1: "Yapısal", srv_holz_tag2: "Ahşap ev", srv_holz_tag3: "Sürdürülebilir",
+    atm_overline: "Atmosfer",
+    atm_title: "Gün<br /><em>huzura erdiğinde.</em>",
+    atm_sub: "Bitmiş bir yapı sadece duvar, ahşap ve camdan ibaret değildir. Hikayelerin başladığı yerdir — güvenle inşa edilmiş, titizlikle koordine edilmiş, zamanında teslim edilmiş.",
+    prin_label: "Değerlerimiz", prin_title: "Beş ilke.<br /><em>Tek bir taahhüt.</em>",
+    prin_lead: "İhtiyaçlarınızı ve beklentilerinizi en üst düzeyde karşılamak üzere şekillenmiş geniş hizmet yelpazemizi keşfedin.",
+    prin1_title: "Proje danışmanlığı + yönetimi",
+    prin1_text: "Her projeye, vizyonunuzun detaylı kaydıyla başlarız ki dileklerinizi tam olarak hayata geçirebilelim. Ekibimiz, projenin her boyutunu sizinle yakın çalışarak inceler ve koordine eder; gereksinimleriniz daima merkezdedir.",
+    prin2_title: "Koordinasyon",
+    prin2_text: "Pürüzsüz bir akış, tüm meslek dallarının dikkatli uyumunu gerektirir. İlgili tüm firma ve uzmanların koordinasyonunu üstlenir, uyumlu ve hedefe odaklı bir iş birliği sağlarız.",
+    prin3_title: "Sürdürülebilirlik",
+    prin3_text: "Sürdürülebilir malzeme tedariki bizim için merkezi bir konudur. Hem çevreyi korumak hem de yapınıza uzun ömürlü değer katmak için malzemeleri ve kaynakları titizlikle seçeriz.",
+    prin4_title: "Termin sadakati", prin4_emph: "Zamanınız değerlidir!",
+    prin4_text: "Bu yüzden kararlaştırılan zaman planına sıkı sıkıya bağlı kalırız. Kanıtlanmış süreçler ve etkin koordinasyon ile projenizin hızlı ve zamanında tamamlanmasını garanti ederiz.",
+    prin5_title: "Maliyet yönetimi",
+    prin5_text: "Şeffaf maliyet dökümü ve sıkı bütçe yönetimi işimizin temel taşlarıdır. Yaratıcı ve etkili çözümlerle bütçenize özen göstererek projenizin ekonomik açıdan da sağlam yürümesini taahhüt ederiz.",
+    prc_label: "Akış", prc_title: "Fikirden.<br /><em>Anahtar teslimine.</em>",
+    prc_lead: "Doğaçlama eylem yerine yapılandırılmış inşaat süreçleri. Her adım belgelenir, takvimlendirilir ve sizinle uyum içinde ilerler.",
+    prc1_title: "İlk görüşme", prc1_text: "Vizyon, çerçeve, fizibilite. Sahada veya dijital ortamda.",
+    prc2_title: "Konsept", prc2_text: "Detaylı tespit, alternatif çalışması, ilk maliyet hesabı.",
+    prc3_title: "Planlama", prc3_text: "Resmi süreçler, uygulama planı, meslek dalı koordinasyonu.",
+    prc4_title: "Uygulama", prc4_text: "Şantiye yönetimi, termin ve maliyet kontrolü, kalite güvencesi.",
+    prc5_title: "Teslim", prc5_text: "Son kabul, dokümantasyon, garanti süreci.",
+    bau_label: "Üst Kat Ekleme Projesi", bau_title: "Önce.<br /><em>Sonra.</em>",
+    bau_lead: "Gerçek bir üst kat ekleme projesi, on saniyede anlatıldı. Üç cephe, üç perspektif — yapı kalır, karakter büyür.",
+    bau_tag: "Önce · Sonra",
+    ref_label: "Projeler", ref_title: "Hayata geçirilen<br /><em>yapılar.</em>",
+    ref_lead: "Çalışmalarımızdan bir seçki. Yeni yapılardan duyarlı restorasyonlara, karakter sahibi ahşap projelere kadar.",
+    ref1_title: "Üst Kat Ekleme", ref1_meta: "Önce · Sonra", ref1_tag: "Aufstockung",
+    ref2_title: "Hofacker", ref2_meta: "Ek bina · Tadilat", ref2_tag: "Ek bina",
+    ref3_title: "Özgün", ref3_meta: "Anahtar teslim", ref3_tag: "Yeni Yapı",
+    ref4_title: "Spiegel", ref4_meta: "Yapı yenileme", ref4_tag: "Restorasyon",
+    werte_eng_title: "Bağlılık", werte_eng_text: "En yüksek kalite standartları ve müşteri odaklı yaklaşım çalışmamızın temelini oluşturur.",
+    werte_ver_title: "Güven", werte_ver_text: "Yapı projenizi özen ve uzmanlıkla başarıya taşıyacak profesyonel ekibimize güvenin.",
+    abt_label: "Yönetim", abt_title: "CM'in<br /><em>arkasındaki isimler.</em>",
+    abt_lead: "Her projenin kendine özgü olduğunu biliriz; bu yüzden müşterilerimize özel olarak biçimlenmiş çözümler sunarız.",
+    abt_quote: "Sadece bina inşa etmem — değer kurarım.",
+    abt_bio: "Kökleri ahşap inşaata uzanan, 15 yılı aşan inşaat tecrübesiyle; net planlama, açık yapı ve gerçek söz senedi kalitesini savunuyorum. Geleneksel zanaatı modern inşaat yetkinliğiyle bir araya getirir, kalıcı ve güven veren projeler için düşünülmüş, yapılandırılmış inşaat süreçleri tasarlarım.",
+    abt_role_ceo: "Kurucu & Genel Müdür", abt_role_pm: "Proje Yöneticisi",
+    cta_overline: "Hassasiyet · Verimlilik · CM",
+    cta_headline: "En üst düzeyde<br /><em>bir inşaat projesine hazır mısınız?</em>",
+    ctc_label: "İletişim", ctc_title: "Sizin için<br /><em>buradayız.</em>",
+    ctc_location: "Konum", ctc_region: "", ctc_route_btn: "Yol tarifi al",
+    ctc_office: "Ofis", ctc_ceo_label: "Genel Müdür", ctc_pm_label: "Proje", ctc_hours: "Mesai saatleri", ctc_hours_1: "Pzt – Cuma · 08:00 – 12:00",
+    form_title: "Proje talep edin", form_sub: "24 saat içinde yanıt alırsınız.",
+    form_firstname: "Ad", form_lastname: "Soyad", form_email: "E-posta", form_phone: "Cep telefonu",
+    form_concern: "Talebiniz", form_select: "Seçiniz …",
+    form_neubau: "Yeni Yapı", form_altbau: "Eski Yapı", form_umbau: "Tadilat", form_san: "Restorasyon", form_holz: "Ahşap İnşaat", form_ausf: "Uygulama", form_other: "Diğer",
+    form_contact_pref: "Sizinle nasıl iletişime geçelim?", form_callback: "Geri arama", form_email_short: "E-posta", form_pigeon: "Posta güvercini",
+    form_pigeon_msg: "Maalesef tüm güvercinlerimiz görevde. Başka bir kanal denemek ister misiniz&nbsp;<span style=\"color:var(--copper);\">(:</span>",
+    form_message: "Mesajınız", form_submit: "Talebi gönder",
+    footer_tagline: "En yüksek standartta genel müteahhit hizmeti.",
+    footer_nav: "Navigasyon", footer_contact: "İletişim", footer_disciplines: "Disiplinler",
+    footer_copy: "© 2026 CM Baumanagement", footer_imprint: "Künye", footer_privacy: "Gizlilik",
+    float_ai: "AI asistan · Soru sorun", float_maps: "Yol tarifi", float_wa: "WhatsApp · Anında talep", float_top: "Yukarı çık",
+  },
+};
+
+function setLanguage(lang) {
+  if (!I18N[lang]) lang = 'de';
+  const dict = I18N[lang];
+  document.getElementById('htmlRoot').setAttribute('lang', lang);
+  const titleEl = document.getElementById('pageTitle');
+  if (titleEl && dict.page_title) titleEl.textContent = dict.page_title;
+  const descEl = document.getElementById('pageDesc');
+  if (descEl && dict.page_desc) descEl.setAttribute('content', dict.page_desc);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (dict[key] !== undefined) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-tooltip]').forEach(el => {
+    const key = el.getAttribute('data-i18n-tooltip');
+    if (dict[key] !== undefined) el.setAttribute('data-tooltip', dict[key]);
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('is-active', btn.getAttribute('data-lang') === lang);
+  });
+  try { localStorage.setItem('cmbau_lang', lang); } catch(e) {}
+}
+
+(function initLanguage() {
+  let lang = 'de';
+  try {
+    const saved = localStorage.getItem('cmbau_lang');
+    if (saved && I18N[saved]) {
+      lang = saved;
+    } else {
+      const browserLang = (navigator.language || 'de').toLowerCase().split('-')[0];
+      if (I18N[browserLang]) lang = browserLang;
+    }
+  } catch(e) {}
+  setLanguage(lang);
+})();
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const newLang = btn.getAttribute('data-lang');
+    setLanguage(newLang);
+  });
+});
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    const target=document.querySelector(link.getAttribute('href'));
+    if(target){e.preventDefault();lenis.scrollTo(target,{duration:1.6,offset:-60});}
+  });
+});
+const nav=document.getElementById('nav');
+lenis.on('scroll',({scroll})=>{nav.classList.toggle('is-scrolled',scroll>80);});
+
+// MOBILE MENU
+const burger = document.getElementById('navBurger');
+const mobileMenu = document.getElementById('mobileMenu');
+if (burger) {
+  burger.addEventListener('click', () => {
+    const isOpen = burger.classList.toggle('is-open');
+    mobileMenu.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', isOpen);
+    document.body.classList.toggle('menu-open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+}
+document.querySelectorAll('[data-mm-link]').forEach(link => {
+  link.addEventListener('click', () => {
+    burger.classList.remove('is-open');
+    mobileMenu.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+    document.body.style.overflow = '';
+  });
+});
+
+// VIDEO (loads on all devices)
+const heroMedia=document.getElementById('heroMedia');
+const heroVideo=document.getElementById('heroVideo');
+if (heroVideo) {
+  function onVideoReady(){heroVideo.classList.add('is-ready');heroMedia.classList.add('video-loaded');}
+  if(heroVideo.readyState>=3){onVideoReady();}else{
+    heroVideo.addEventListener('canplay',onVideoReady,{once:true});
+    heroVideo.addEventListener('loadeddata',onVideoReady,{once:true});
+  }
+  const playPromise=heroVideo.play();
+  if(playPromise!==undefined){playPromise.catch(()=>{
+    document.addEventListener('click',()=>heroVideo.play(),{once:true});
+    document.addEventListener('touchstart',()=>heroVideo.play(),{once:true});
+  });}
+}
+
+// SECONDARY VIDEOS (Atmosphäre + Bauprozess)
+['atmosphereVideo', 'bauprozessVideo'].forEach(id => {
+  const v = document.getElementById(id);
+  if (v) {
+    const playPromise2 = v.play();
+    if (playPromise2 !== undefined) {
+      playPromise2.catch(() => {
+        document.addEventListener('click', () => v.play(), { once: true });
+        document.addEventListener('touchstart', () => v.play(), { once: true });
+      });
+    }
+  }
+});
+
+// REVEAL
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');}});
+},{threshold:0.15,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+const pt=document.getElementById('processTrack');if(pt)observer.observe(pt);
+
+// COUNTERS — Premium easeOutQuart, smooth and elegant
+function animateCounter(el){
+  const target=parseInt(el.dataset.counter);
+  const dur=parseInt(el.dataset.counterDuration)||2500;
+  const start=performance.now();
+  function step(now){
+    const p=Math.min(1,(now-start)/dur);
+    // easeOutQuart — daha yumuşak, lüks his (saatin yavaşça duruşu gibi)
+    const eased=1-Math.pow(1-p,4);
+    const cur=Math.floor(eased*target);
+    el.textContent=cur;
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=target;
+  }
+  requestAnimationFrame(step);
+}
+const counterObserver=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting&&!entry.target.dataset.done){
+      entry.target.dataset.done='1';
+      animateCounter(entry.target);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('[data-counter]').forEach(el=>counterObserver.observe(el));
+
+// REVIEWS CAROUSEL
+(function initReviewsCarousel(){
+  const track = document.getElementById('reviewsTrack');
+  const prev = document.getElementById('reviewsPrev');
+  const next = document.getElementById('reviewsNext');
+  const dotsWrap = document.getElementById('reviewsDots');
+  if(!track || !prev || !next) return;
+
+  const cards = Array.from(track.children);
+  const total = cards.length;
+  // 2 kart görünür (desktop), 1 kart mobile
+  const isMobile = () => window.innerWidth < 768;
+  const visible = () => isMobile() ? 1 : 2;
+  const totalSlides = () => Math.max(1, total - visible() + 1);
+
+  let current = 0;
+
+  function goTo(idx){
+    current = Math.max(0, Math.min(idx, totalSlides() - 1));
+    const cardWidth = cards[0].offsetWidth + 24; // 24 = gap
+    track.style.transform = \`translateX(-\${current * cardWidth}px)\`;
+    updateNav();
+    updateDots();
+  }
+  function updateNav(){
+    if(current === 0) prev.classList.add('is-disabled');
+    else prev.classList.remove('is-disabled');
+    if(current >= totalSlides() - 1) next.classList.add('is-disabled');
+    else next.classList.remove('is-disabled');
+  }
+  function buildDots(){
+    if(!dotsWrap) return;
+    dotsWrap.innerHTML = '';
+    for(let i = 0; i < totalSlides(); i++){
+      const dot = document.createElement('button');
+      dot.className = 'reviews-dot' + (i === current ? ' is-active' : '');
+      dot.setAttribute('aria-label', (lang === "de" ? \`Bewertung \${i+1}\` : \`Yorum \${i+1}\`));
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    }
+  }
+  function updateDots(){
+    if(!dotsWrap) return;
+    Array.from(dotsWrap.children).forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === current);
+    });
+  }
+
+  prev.addEventListener('click', () => goTo(current - 1));
+  next.addEventListener('click', () => goTo(current + 1));
+
+  // Auto-slide every 6 seconds
+  let autoTimer = setInterval(() => {
+    if(current >= totalSlides() - 1) goTo(0);
+    else goTo(current + 1);
+  }, 6000);
+
+  // Pause on hover
+  const carousel = track.parentElement;
+  carousel.addEventListener('mouseenter', () => clearInterval(autoTimer));
+  carousel.addEventListener('mouseleave', () => {
+    autoTimer = setInterval(() => {
+      if(current >= totalSlides() - 1) goTo(0);
+      else goTo(current + 1);
+    }, 6000);
+  });
+
+  // Resize handle
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      buildDots();
+      goTo(Math.min(current, totalSlides() - 1));
+    }, 150);
+  });
+
+  buildDots();
+  goTo(0);
+})();
+
+// AI ASSISTANT — Notification badge (5 sn sonra) + Chat panel + Demo modal
+(function initAIAssistant(){
+  const aiBtn = document.getElementById('aiAssistantBtn');
+  const aiBadge = document.getElementById('aiAssistantBadge');
+  const aiPanel = document.getElementById('aiChatPanel');
+  const aiClose = document.getElementById('aiChatClose');
+  const aiInput = document.getElementById('aiChatInput');
+  const aiSend = document.getElementById('aiChatSend');
+  const demoModal = document.getElementById('aiDemoModal');
+  const demoClose = document.getElementById('aiDemoClose');
+  if(!aiBtn || !aiPanel || !demoModal) return;
+
+  // 5 sn sonra badge belirir
+  setTimeout(() => {
+    if(aiBadge && !aiPanel.classList.contains('is-open')){
+      aiBadge.classList.add('is-visible');
+    }
+  }, 5000);
+
+  // AI butonuna tıkla → chat panel aç + badge gizle
+  aiBtn.addEventListener('click', () => {
+    aiPanel.classList.add('is-open');
+    aiPanel.setAttribute('aria-hidden', 'false');
+    if(aiBadge) aiBadge.classList.remove('is-visible');
+  });
+
+  // Chat panel kapat
+  aiClose.addEventListener('click', () => {
+    aiPanel.classList.remove('is-open');
+    aiPanel.setAttribute('aria-hidden', 'true');
+  });
+
+  // Mesaj input/send → demo modal aç
+  function openDemoModal(){
+    demoModal.classList.add('is-open');
+    demoModal.setAttribute('aria-hidden', 'false');
+  }
+  aiInput.addEventListener('click', openDemoModal);
+  aiInput.addEventListener('focus', openDemoModal);
+  aiSend.addEventListener('click', openDemoModal);
+
+  // Demo modal kapat
+  function closeDemoModal(){
+    demoModal.classList.remove('is-open');
+    demoModal.setAttribute('aria-hidden', 'true');
+  }
+  demoClose.addEventListener('click', closeDemoModal);
+  demoModal.addEventListener('click', (e) => {
+    if(e.target === demoModal) closeDemoModal();
+  });
+
+  // Esc ile her ikisini de kapat
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      if(demoModal.classList.contains('is-open')) closeDemoModal();
+      else if(aiPanel.classList.contains('is-open')){
+        aiPanel.classList.remove('is-open');
+        aiPanel.setAttribute('aria-hidden', 'true');
+      }
+    }
+  });
+})();
+
+// SCROLL-TO-TOP BUTTON
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+if (scrollTopBtn) {
+  lenis.on('scroll', ({ scroll }) => {
+    if (scroll > 500) {
+      scrollTopBtn.classList.remove('is-hidden');
+    } else {
+      scrollTopBtn.classList.add('is-hidden');
+    }
+  });
+  scrollTopBtn.addEventListener('click', () => {
+    lenis.scrollTo(0, { duration: 1.8 });
+  });
+}
+
+// BRIEFTAUBE EASTER EGG
+const brieftaubeLabel = document.getElementById('brieftaubeLabel');
+const brieftaubeMsg = document.getElementById('brieftaubeMsg');
+const brieftaubeInput = document.getElementById('ch4');
+if (brieftaubeLabel && brieftaubeMsg) {
+  brieftaubeLabel.addEventListener('mouseenter', () => {
+    brieftaubeMsg.classList.add('is-visible');
+  });
+  brieftaubeLabel.addEventListener('click', () => {
+    brieftaubeMsg.classList.add('is-visible');
+    setTimeout(() => {
+      if (brieftaubeInput && brieftaubeInput.checked) {
+        document.getElementById('ch1').checked = true;
+      }
+    }, 50);
+  });
+}
+
+// LOADER — Premium 3D GIF intro
+(function initLoader(){
+  const loader = document.getElementById('loader');
+  if(!loader) return;
+
+  const DURATION = 6000;       // Video 6 saniye oynar, sonra fade out
+  const FADE_DELAY = 250;
+  let hidden = false;
+
+  function hideLoader(){
+    if(hidden) return;
+    hidden = true;
+    setTimeout(() => {
+      loader.classList.add('is-hidden');
+      setTimeout(()=>{
+        const heroOverline = document.getElementById('heroOverline');
+        const heroTitle = document.getElementById('heroTitle');
+        if(heroOverline) heroOverline.classList.add('is-visible');
+        if(heroTitle) heroTitle.classList.add('is-visible');
+      }, 200);
+      setTimeout(()=>{
+        const heroSub = document.getElementById('heroSub');
+        const heroActions = document.getElementById('heroActions');
+        if(heroSub) heroSub.classList.add('is-visible');
+        if(heroActions) heroActions.classList.add('is-visible');
+      }, 700);
+      setTimeout(()=>{
+        const heroSpec = document.getElementById('heroSpec');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        if(heroSpec) heroSpec.classList.add('is-visible');
+        if(scrollIndicator) scrollIndicator.classList.add('is-visible');
+      }, 1200);
+    }, FADE_DELAY);
+  }
+
+  // GIF süresi sonunda fade out
+  setTimeout(hideLoader, DURATION);
+
+  // Failsafe — her ihtimale karşı 8 saniye sonra zorla kapat
+  setTimeout(() => {
+    if(!hidden) hideLoader();
+  }, 8000);
+})();
+
+</script>
+
+</body>
+</html>
+`;
+// ── ÇIKTI ──
+return [{
+  json: {
+    html,
+    firmSlug,
+    firmaAdi,
+    telefonOfis: telefon,
+    emailOfis,
+    adresTam: adres,
+    siteUrl,
+    lang
+  }
+}];
+
+/* ─── PARÇA 3 SONU — insaat-node.js TAMAMLANDI ─── */
